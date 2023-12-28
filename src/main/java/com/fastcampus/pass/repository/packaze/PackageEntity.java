@@ -1,15 +1,15 @@
 package com.fastcampus.pass.repository.packaze;
 
 import com.fastcampus.pass.repository.BaseEntity;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
-@Setter
 @ToString
+@NoArgsConstructor
+@Builder
+@AllArgsConstructor
 @Entity
 @Table(name = "package")
 public class PackageEntity extends BaseEntity {
@@ -20,5 +20,8 @@ public class PackageEntity extends BaseEntity {
     private String packageName;
     private Integer count;
     private Integer period;
+
+
+
 
 }
