@@ -2,15 +2,12 @@ package com.fastcampus.pass.job.pass;
 
 import com.fastcampus.pass.repository.pass.PassEntity;
 import com.fastcampus.pass.repository.pass.PassStatus;
-import org.hibernate.engine.spi.EntityEntryFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JpaCursorItemReader;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.builder.JpaCursorItemReaderBuilder;
@@ -76,10 +73,11 @@ public class ExpirePassesJobConfig {
     }
 
     public ItemProcessor<PassEntity, PassEntity> expirePassesItemProcessor() {
-        return passEntity -> PassEntity.builder()
-                .status(PassStatus.EXPIRED)
-                .expiredAt(LocalDateTime.now())
-                .build();
+        return passEntity -> {
+            passEntity.setStatus(PassStatus.EXPIRED);
+            passEntity.setExpiredAt(LocalDateTime.now());
+            return passEntity;
+        };
     }
 
     public JpaItemWriter<PassEntity> expirePassesItemWriter() {
