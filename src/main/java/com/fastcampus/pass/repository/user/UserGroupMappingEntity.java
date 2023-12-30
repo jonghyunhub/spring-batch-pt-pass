@@ -1,9 +1,7 @@
 package com.fastcampus.pass.repository.user;
 
 import com.fastcampus.pass.repository.BaseEntity;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,6 +14,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user_group_mapping")
 @IdClass(UserGroupMappingId.class)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserGroupMappingEntity extends BaseEntity {
     @Id
     private String userGroupId;

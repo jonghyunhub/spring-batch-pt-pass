@@ -33,13 +33,15 @@ class PassModelMapperTest {
                         "status",
                         "remainingCount",
                         "startedAt",
-                        "endedAt")
+                        "endedAt",
+                        "userId")
                 .containsExactly(
                         1,
                         PassStatus.READY,
                         10,
                         now.minusDays(60),
-                        now
+                        now,
+                        userId
                 );
 
     }
