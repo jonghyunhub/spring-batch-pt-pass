@@ -41,12 +41,9 @@ public class AddPassesTasklet implements Tasklet {
         for (BulkPassEntity bulkPassEntity : bulkPassEntities) {
             final List<String> userIds = userGroupMappingRepository.findByUserGroupId(bulkPassEntity.getUserGroupId())
                     .stream().map(UserGroupMappingEntity::getUserId).toList();
-
             count += addPasses(bulkPassEntity, userIds);
-
             bulkPassEntity.setStatus(BulkPassStatus.COMPLETED);
         }
-
 
         log.info("AddPassesTasklet - execute: 이용권 {}건 추가 완료, startedAt={}",count, startedAt);
         return RepeatStatus.FINISHED;
