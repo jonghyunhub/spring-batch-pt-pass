@@ -1,6 +1,7 @@
 package com.fastcampus.pass.repository.notification;
 
 import com.fastcampus.pass.repository.booking.BookingEntity;
+import com.fastcampus.pass.utils.LocalDateTimeUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
