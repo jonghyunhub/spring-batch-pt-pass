@@ -21,6 +21,9 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-batch'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.batch:spring-batch-integration' // AsyncItemProcessor, AsyncItemWriter
+	implementation 'org.springframework.boot:spring-boot-starter-webflux' // WebClient
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor" // @ConfigurationProperties
 	runtimeOnly 'mysql:mysql-connector-java'
 
 	// lombok
