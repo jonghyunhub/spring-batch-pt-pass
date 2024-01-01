@@ -31,7 +31,7 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.2.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
 
-	// hibernate-types
+	// hibernate-types -  지원하지 않는 타입을 따로 정의하는게 가능
 	implementation 'com.vladmihalcea:hibernate-types-52:2.19.2'
 
 	// csv
