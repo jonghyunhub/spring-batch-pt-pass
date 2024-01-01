@@ -99,10 +99,10 @@ public class SendNotificationBeforeClassJobConfig {
     @Bean
     public Step sendNotificationStep() {
         return this.stepBuilderFactory.get("sendNotificationStep")
-                .<NotificationEntity, NotificationEvent>chunk(CHUNK_SIZE)
+                .<NotificationEntity, NotificationEntity>chunk(CHUNK_SIZE)
                 .reader(sendNotificationItemReader())
                 .writer(sendNotificationItemWriter)
-                .taskExecutor(new SimpleAsyncTaskExecutor())
+                .taskExecutor(new SimpleAsyncTaskExecutor())// 멀티쓰레드로 아이템 라이트 적용
                 .build();
 
     }
