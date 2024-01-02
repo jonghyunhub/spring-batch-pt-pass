@@ -1,6 +1,7 @@
 package com.fastcampus.pass.job.notification;
 
 import com.fastcampus.pass.repository.booking.BookingEntity;
+import com.fastcampus.pass.repository.booking.BookingStatus;
 import com.fastcampus.pass.repository.notification.NotificationEntity;
 import com.fastcampus.pass.repository.notification.NotificationEvent;
 import com.fastcampus.pass.repository.notification.NotificationModelMapper;
@@ -9,7 +10,6 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.database.JpaCursorItemReader;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 
 import javax.persistence.EntityManagerFactory;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Configuration
@@ -37,7 +38,10 @@ public class SendNotificationBeforeClassJobConfig {
 
     private final SendNotificationItemWriter sendNotificationItemWriter;
 
-    public SendNotificationBeforeClassJobConfig(JobBuilderFactory jobBuilderFactory, StepBuilderFactory stepBuilderFactory, EntityManagerFactory entityManagerFactory, SendNotificationItemWriter sendNotificationItemWriter) {
+    public SendNotificationBeforeClassJobConfig(JobBuilderFactory jobBuilderFactory,
+                                                StepBuilderFactory stepBuilderFactory,
+                                                EntityManagerFactory entityManagerFactory,
+                                                SendNotificationItemWriter sendNotificationItemWriter) {
         this.jobBuilderFactory = jobBuilderFactory;
         this.stepBuilderFactory = stepBuilderFactory;
         this.entityManagerFactory = entityManagerFactory;
@@ -74,10 +78,11 @@ public class SendNotificationBeforeClassJobConfig {
     public JpaPagingItemReader<BookingEntity> addNotificationItemReader() {
         // 상태(status)가 준비중이며, 시작일시(startedAt)이 10분 후 시작하는 예약이 알림 대상이 됨
         return new JpaPagingItemReaderBuilder<BookingEntity>()
-                .name("addNotificationItenReader")
+                .name("addNotificationItemReader")
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(CHUNK_SIZE)
                 .queryString("select b from BookingEntity b join fetch b.userEntity where b.status = :status and b.startedAt <= :startedAt order by b.bookingSeq")
+                .parameterValues(Map.of("status", BookingStatus.READY, "startedAt", LocalDateTime.now().plusMinutes(10)))
                 .build();
     }
 
@@ -104,7 +109,6 @@ public class SendNotificationBeforeClassJobConfig {
                 .writer(sendNotificationItemWriter)
                 .taskExecutor(new SimpleAsyncTaskExecutor())// 멀티쓰레드로 아이템 라이트 적용
                 .build();
-
     }
 
     /**
